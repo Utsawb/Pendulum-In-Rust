@@ -24,16 +24,24 @@ impl Pendulum {
     }
 
     pub fn key_logic(&mut self, _key: Key) {
+        if _key == Key::Up { self.string_length = self.string_length + 50.0}
+        if _key == Key::Down { self.string_length = self.string_length - 50.0}
     }
 
     pub fn logic(&mut self, _app: &App, _update: Update) {
         let delta_time = _update.since_last.as_secs_f32();
-        self.angle = self.angle + 100.0 * delta_time;
+        self.angle_acc = self.gravity * self.angle.sin() / self.string_length;
+        self.angle_vel = self.angle_vel + self.angle_acc * delta_time;
+        self.angle = self.angle + self.angle_vel * delta_time;
+
+        self.bob_x = self.string_length * self.angle.sin() + self.orgin_x;
+        self.bob_y = self.string_length * -1.0 * self.angle.cos() + self.orgin_y;
     }
 
     pub fn draw(&self, draw: &Draw) {
         let orgin = pt2(self.orgin_x, self.orgin_y);
         let bob = pt2(self.bob_x, self.bob_y);
+        draw.ellipse().xy(orgin).radius(5.0).color(BLACK);
         draw.line().start(orgin).end(bob).weight(10.0).color(BLACK);
         draw.ellipse().xy(bob).radius(25.0).color(BLACK);
     }
