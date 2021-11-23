@@ -19,21 +19,15 @@ fn model(app: &App) -> Model {
     let _window = app.
                             new_window()
                             .title("Pendulum")
-                            .key_pressed(key_pressed)
                             .view(view)
                             .build()
                             .unwrap();
     let win = app.window_rect();
 
     //Custom Code
-    let pendulum = Pendulum::new(win.x(), win.top(), 500.0, PI/4.0, -1000.0);
+    let pendulum = Pendulum::new(win.x(), win.y(), 100.0, PI/4.0, -1000.0);
 
     Model { _window, pendulum }
-}
-
-fn key_pressed(_app: &App, _model: &mut Model, _key: Key) {
-    //Custom Code
-    _model.pendulum.key_logic(_key);
 }
 
 fn update(_app: &App, _model: &mut Model, _update: Update) {
@@ -43,7 +37,6 @@ fn update(_app: &App, _model: &mut Model, _update: Update) {
 
 fn view(app: &App, _model: &Model, frame: Frame) {
     let draw = app.draw();
-
     draw.background().color(WHITE);
 
     //Custom Code
